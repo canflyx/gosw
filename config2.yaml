@@ -1,0 +1,46 @@
+app:
+  name: gosw
+  key: this is your app key
+  http:
+    host: 127.0.0.1
+    port: '8055'
+sqlite:
+  path: ./app1.db
+log:
+  level: debug
+  path: logs
+  format: text
+  to: stdout
+telnet_cmds:
+  - brand: 'huawei'
+    user_flag: 'name:'
+    password_flag: 'ssword:'
+    login_flag: '>'
+    enable_flag: ']'
+    enable_cmd: sys
+    read_cmd: dis arp
+    read_flag: ']'
+    cmds:
+      - cmd: user-interface vty 0 4
+        cmd_flag: ']'
+      - cmd: screen-length 0
+        cmd_flag: ']'
+    exit_cmds:
+      - cmd: screen-length 1
+        cmd_flag: ']'
+  - brand: 'h3c'
+    user_flag: 'name:'
+    password_flag: 'ssword:'
+    login_flag: '>'
+    enable_flag: ']'
+    enable_cmd: sys
+    read_cmd: dis arp
+    read_flag: ']'
+    cmds:
+      - cmd: user-interface vty 0 4
+        cmd_flag: ']'
+      - cmd: screen-length 0
+        cmd_flag: ']'
+    exit_cmds:
+      - cmd: screen-length 50
+        cmd_flag: ']'

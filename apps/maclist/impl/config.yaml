@@ -1,0 +1,34 @@
+app:
+    name: go-switch
+    encrypt: ""
+    http:
+        host: 127.0.0.1
+        port: "8055"
+        enable_ssl: false
+        cert_file: ""
+        key_file: ""
+log:
+    level: debug
+    path_dir: logs
+    format: text
+    to: stdout
+sql_type:
+    path: ./app.db
+telnet_cmds:
+    - brand: default
+      user_flag: 'name:'
+      password_flag: 'ssword:'
+      login_flag: '>'
+      enable_cmd: sys
+      enable_flag: ']'
+      cmds:
+        - cmd: user-interface vty 0 4
+          cmd_flag: ']'
+        - cmd: screen-length 0
+          cmd_flag: ']'
+      read_cmd: dis mac-address
+      core_cmd: dis arp
+      read_flag: ']'
+      exit_cmds:
+        - cmd: screen-length 1
+          cmd_flag: ']'

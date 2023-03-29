@@ -1,0 +1,18 @@
+[app]
+name = "gosw"
+key  = "this is your app key"
+
+[app.http]
+host = "127.0.0.1"
+port = "8055"
+
+
+
+[sqlite]
+path = "./app.db"
+
+[log]
+level = "debug"
+path = "logs"
+format = "text"
+to = "stdout"

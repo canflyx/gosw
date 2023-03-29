@@ -1,0 +1,8 @@
+b44c-3b6e-fdf4   40         Learned          GE1/0/7                  Y
+b44c-3bf4-65da   40         Learned          GE1/0/7                  Y
+c039-5ab0-0377   40         Learned          GE1/0/7                  Y
+cc96-e500-b61b   40         Learned          GE1/0/7                  Y
+e050-8bd5-aefe   40         Learned          GE1/0/7                  Y
+e424-6c85-4ae8   40         Learned          GE1/0/7                  Y
+9ce8-950c-8567   100        Learned          GE1/0/18                 Y
+482c-d0aa-f115   1000       Learned          GE1/0/24                 Y
