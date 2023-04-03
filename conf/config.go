@@ -4,8 +4,8 @@ import (
 
 	// _ "github.com/go-sql-driver/mysql"
 	"sync"
+	"time"
 
-	"github.com/canflyx/gosw/apps/switches"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -26,7 +26,7 @@ func newConfig() *Config {
 
 // Config 应用配置
 type Config struct {
-	App        *app         `json:"app" yaml:"app"`
+	App        *App         `json:"app" yaml:"app"`
 	Log        *log         `json:"log"  yaml:"log"`
 	Sqlite     *Sqlite3     `json:"sql_type" yaml:"sql_type"`
 	TelnetCmds []*TelnetCmd `json:"telnet_cmds" yaml:"telnet_cmds"`
@@ -43,18 +43,23 @@ func (c *Config) TelnetCmd() map[string]TelnetCmd {
 	return brandMap
 }
 
-type app struct {
-	Name       string `json:"name" env:"APP_NAME" yaml:"name"`
-	EncryptKey string `json:"encrypt_key" env:"APP_ENCRYPT_KEY" yaml:"encrypt"`
-	HTTP       *http  `json:"http" yaml:"http"`
+type App struct {
+	Name          string `json:"name" env:"APP_NAME" yaml:"name"`
+	EncryptKey    string `json:"encrypt_key" env:"APP_ENCRYPT_KEY" yaml:"encrypt"`
+	HTTP          *http  `json:"http" yaml:"http"`
+	TelnetTimeout int64  `json:"telnet_timeout"`
 }
 
-func newDefaultAPP() *app {
-	return &app{
+func newDefaultAPP() *App {
+	return &App{
 		Name: "go-switch",
 		// EncryptKey: "defualt app encrypt key",
-		HTTP: newDefaultHTTP(),
+		HTTP:          newDefaultHTTP(),
+		TelnetTimeout: 5,
 	}
+}
+func (a *App) GetTime() time.Duration {
+	return time.Duration(a.TelnetTimeout) * time.Second
 }
 
 type http struct {
@@ -162,7 +167,7 @@ func (s *Sqlite3) CreateTables() {
 			id
 		)
 	);`
-	if !db.Migrator().HasTable(&switches.Switches{}) {
+	if !db.Migrator().HasTable("switches") {
 		db.Exec(sql)
 	}
 }
@@ -175,7 +180,8 @@ type TelnetCmd struct {
 	EnableCmd    string `json:"enable_cmd" yaml:"enable_cmd" `
 	EnableFlag   string `json:"enable_flag" yaml:"enable_flag"`
 	Cmds         []CMD  `json:"cmds" yaml:"cmds"`
-	ReadCmd      string `json:"read_cmd" yaml:"read_cmd"`
+	ReadCmd      []CMD  `json:"read_cmd" yaml:"read_cmd"`
+	AccessCmd    string `json:"access_cmd" yaml:"access_cmd"`
 	CoreCmd      string `json:"core_cmd" yaml:"core_cmd"`
 	ReadFlag     string `json:"read_flag" yaml:"read_flag"`
 	ExitCmds     []CMD  `json:"exit_cmds"  yaml:"exit_cmds"`
@@ -195,7 +201,7 @@ func newDefaultTelnetCmd() []*TelnetCmd {
 		EnableCmd:    "sys",
 		EnableFlag:   "]",
 		Cmds:         []CMD{{"user-interface vty 0 4", "]"}, {"screen-length 0", "]"}},
-		ReadCmd:      "dis mac-address",
+		AccessCmd:    "dis mac-address",
 		CoreCmd:      "dis arp",
 		ReadFlag:     "]",
 		ExitCmds:     []CMD{{"screen-length 50", "]"}},

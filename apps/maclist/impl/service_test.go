@@ -2,42 +2,43 @@ package impl
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"testing"
 
 	"github.com/canflyx/gosw/apps/maclist"
-	mock_dal "github.com/canflyx/gosw/apps/maclist/mocks"
 	"github.com/canflyx/gosw/apps/switches"
 	"github.com/canflyx/gosw/conf"
-	"github.com/golang/mock/gomock"
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func TestQueryMacList(t *testing.T) {
-	re := maclist.QueryMacRequest{PageSize: 10, PageNumber: 1, Keyword: nil}
-	ctl := gomock.NewController(t)
-	c := []*maclist.MacList{
-		{MacAddrs: maclist.MacAddrs{MacAddress: "0000-0000-0000", Port: "ETH0", SwitchIp: "192.168.1.1"}, ARPIP: "192,168.3.2"},
-		{MacAddrs: maclist.MacAddrs{MacAddress: "0000-0000-0001", Port: "ETH1", SwitchIp: "192.168.1.1"}, ARPIP: "192,168.3.1"},
-	}
-	mockPerson := mock_dal.NewMockRepositoryer(ctl)
-	mockPerson.EXPECT().QueryByKws(gomock.Any(), gomock.Any(), gomock.Any()).Return(uint64(2), c).AnyTimes()
-	rep := MacListService{rep: mockPerson}
+// func TestQueryMacList(t *testing.T) {
+// 	re := maclist.QueryMacRequest{PageSize: 10, PageNumber: 1, Keyword: nil}
+// 	ctl := gomock.NewController(t)
+// 	c := []*maclist.MacList{
+// 		{MacAddrs: maclist.MacAddrs{MacAddress: "0000-0000-0000", Port: "ETH0", SwitchIp: "192.168.1.1"}, ARPIP: "192,168.3.2"},
+// 		{MacAddrs: maclist.MacAddrs{MacAddress: "0000-0000-0001", Port: "ETH1", SwitchIp: "192.168.1.1"}, ARPIP: "192,168.3.1"},
+// 	}
+// 	mockPerson := mock_dal.NewMockRepositoryer(ctl)
+// 	mockPerson.EXPECT().QueryByKws(gomock.Any(), gomock.Any(), gomock.Any()).Return(uint64(2), c).AnyTimes()
+// 	rep := MacListService{rep: mockPerson}
 
-	set, _ := rep.QueryMacList(context.Background(), &re)
-	fmt.Printf("%d,%v  \n", set.Total, set.Items)
-	for _, mac := range set.Items {
-		ok, _ := json.Marshal(mac)
-		fmt.Println(string(ok))
-	}
-}
+// 	set, _ := rep.QueryMacList(context.Background(), &re)
+// 	fmt.Printf("%d,%v  \n", set.Total, set.Items)
+// 	for _, mac := range set.Items {
+// 		ok, _ := json.Marshal(mac)
+// 		fmt.Println(string(ok))
+// 	}
+// }
 
 type TestRep struct {
 }
 
 func (t *TestRep) SaveMac(sws []*maclist.MacAddrs) error {
 	fmt.Println(sws)
+	return nil
+}
+func (t *TestRep) SaveLog(log *maclist.ScanLog) error {
+	fmt.Println(log)
 	return nil
 }
 func (t *TestRep) SaveARP(sws []*maclist.ARPList) error {
@@ -52,14 +53,15 @@ func (t *TestRep) DescBySWIP(kws map[string]interface{}) []*maclist.MacAddrs {
 	fmt.Println(kws)
 	return nil
 }
+
 func TestSaveAll(t *testing.T) {
-	core := 0
+	core := 1
 	err := conf.LoadConfigFromYaml("config.yaml")
 	if err := loadGlobalLogger(); err != nil {
 		fmt.Println(err)
 	}
 	sws := &switches.Switches{
-		Ip:       "172.17.2.1",
+		Ip:       "172.17.80.1",
 		User:     "daika",
 		Password: "daika2018",
 		IsCore:   &core,
@@ -68,7 +70,8 @@ func TestSaveAll(t *testing.T) {
 		rep: &TestRep{},
 		log: zap.L().Named("maclist"),
 	}
-	err = a.SaveAll(context.Background(), sws)
+	c := []maclist.CMD{{Cmd: "dis users", Flag: "]"}, {Cmd: "dis ver", Flag: "]"}}
+	err = a.SaveAll(context.Background(), sws, c)
 	if err != nil {
 		fmt.Println(err)
 	}

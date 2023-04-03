@@ -7,7 +7,7 @@ import (
 )
 
 type Service interface {
-	ScanSwitch(context.Context, []int) error
+	ScanSwitch(context.Context, ListData) error
 	QueryMacList(ctx context.Context, req *QueryMacRequest) (*MacSet, error)
 	SaveAll(ctx context.Context, sw *switches.Switches) error
 	TelnetSwitch(sw *switches.Switches) ([]*MacList, error)
@@ -16,6 +16,7 @@ type Service interface {
 type Repositoryer interface {
 	SaveMac([]*MacAddrs) error
 	SaveARP([]*ARPList) error
+	SaveLog(*ScanLog) error
 	QueryByKws(map[string]interface{}, int, int) (uint64, []*MacList)
 	DescBySWIP(kws map[string]interface{}) []*MacAddrs
 }

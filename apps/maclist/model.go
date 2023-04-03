@@ -26,6 +26,11 @@ type ARPList struct {
 	MacAddress string `json:"mac_address" gorm:"unique"`
 	Note       string `json:"note"`
 }
+type ScanLog struct {
+	gorm.Model
+	SwitchID uint   `json:"switch_id"`
+	Log      string `json:"log"`
+}
 
 // MacList Mac列表接口响应数据
 
@@ -53,7 +58,14 @@ func NewMacRequest() *QueryMacRequest {
 }
 
 type ListData struct {
-	List []int `json:"list"`
+	List    []int `json:"list"`
+	Value   int   `json:"value"`
+	ReadCmd []CMD `json:"read_cmd"`
+}
+
+type CMD struct {
+	Cmd  string `json:"cmd"`
+	Flag string `json:"flag"`
 }
 
 func NewQueryMacFromHttp(r *http.Request) *QueryMacRequest {

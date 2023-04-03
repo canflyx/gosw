@@ -42,6 +42,10 @@ func (ms *MacListServiceImpl) SaveMac(macs []*maclist.MacAddrs) error {
 
 	return ms.db.Save(&macs).Error
 }
+func (ms *MacListServiceImpl) SaveLog(log *maclist.ScanLog) error {
+
+	return ms.db.Save(&log).Error
+}
 
 func (ms *MacListServiceImpl) SaveARP(arpList []*maclist.ARPList) error {
 

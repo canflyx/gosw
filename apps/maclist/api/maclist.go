@@ -18,7 +18,7 @@ func (h *Handler) scanSw(c *gin.Context) {
 		response.Failed(c.Writer, err)
 		return
 	}
-	err := h.svc.ScanSwitch(c.Request.Context(), ins.List)
+	err := h.svc.ScanSwitch(c.Request.Context(), ins)
 	if err != nil {
 		response.Failed(c.Writer, err)
 		return

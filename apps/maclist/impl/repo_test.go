@@ -55,3 +55,23 @@ func TestSaveARP(t *testing.T) {
 	err := impl.SaveARP(macs)
 	fmt.Println(err)
 }
+
+func TestSaveLog(t *testing.T) {
+	db, _ := gorm.Open(sqlite.Open("../../../app.db"), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
+	if !db.Migrator().HasTable(&maclist.ScanLog{}) {
+		db.AutoMigrate(&maclist.ScanLog{})
+	}
+	impl := &MacListServiceImpl{
+		db: db,
+	}
+
+	mac := &maclist.ScanLog{
+		SwitchID: 11,
+		Log:      "192.168.1.1",
+	}
+
+	err := impl.SaveLog(mac)
+	fmt.Println(err)
+}
