@@ -2,16 +2,28 @@
   <div class="page-search">
     <h-form v-bind="props.searchConfig" v-model="formData">
       <template #header>
-        <span>高级检索</span>
+        <span v-if="props.searchConfig.title">{{
+          props.searchConfig.title
+        }}</span>
+        <span v-else> 高级检索</span>
+      </template>
+      <template #other>
+        <slot name="other"></slot>
       </template>
       <template #footer>
         <div class="handle-btns">
+          <slot name="otherHandler"></slot>
           <el-button
             type="primary"
             @click="handleQueryClick"
+            v-if="permission?.isQuery"
             :icon="Search"
             plain
-            >查找</el-button
+          >
+            <span v-if="permission.queryTitle">{{
+              permission.queryTitle
+            }}</span>
+            <span v-else>搜索</span></el-button
           >
           <el-button
             type="danger"
@@ -27,8 +39,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, PropType } from 'vue'
 import { Search, RefreshRight } from '@element-plus/icons-vue'
+import type { IPermission } from '@/base-ui/table/types'
 
 import HForm from '@/base-ui/form'
 
@@ -36,7 +49,8 @@ const props = defineProps({
   searchConfig: {
     type: Object,
     required: true
-  }
+  },
+  permission: { type: Object as PropType<IPermission> }
 })
 // 搜索由 formItem 决定，可以直接读取 field字段 用作搜索
 const formItems = props.searchConfig?.formItem ?? []

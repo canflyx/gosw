@@ -14,7 +14,7 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-// var _ maclist.Service = (*MacListService)(nil)
+var _ maclist.Service = (*MacListService)(nil)
 
 type MacListService struct {
 	log logger.Logger
@@ -41,9 +41,17 @@ func (ms *MacListService) ScanSwitch(ctx context.Context, ins maclist.ListData) 
 }
 
 // 查询数据给 gin 使用
-func (ms *MacListService) QueryMacList(ctx context.Context, req *maclist.QueryMacRequest) (*maclist.MacSet, error) {
+func (ms *MacListService) QueryMacList(ctx context.Context, req *maclist.QueryKwRequest) (*maclist.MacSet, error) {
 	total, item := ms.rep.QueryByKws(req.Keyword, req.OffSet(), req.GetPageSize())
 	return &maclist.MacSet{
+		Total: total,
+		Items: item,
+	}, nil
+}
+
+func (ms *MacListService) QueryLogList(ctx context.Context, req *maclist.QueryKwRequest) (*maclist.LogSet, error) {
+	total, item := ms.rep.QueryLogByKws(req.Keyword, req.OffSet(), req.GetPageSize())
+	return &maclist.LogSet{
 		Total: total,
 		Items: item,
 	}, nil
@@ -68,13 +76,22 @@ func (ms *MacListService) SaveAll(ctx context.Context, sw *switches.Switches, va
 			cmd.ReadCmd = append(cmd.ReadCmd, conf.CMD{CMD: v.Cmd, CMDFlag: v.Flag})
 		}
 		err, _ := NewCuTelnet(&SwitchesConfig{Switches: *sw, BrandCMD: cmd, Flag: 2, TimeOut: 5})
+		if err != nil {
+			ms.log.Error("switch:", sw.Ip, err)
+		}
 		return err
 	}
 	if *sw.IsCore == 1 {
 		err, _ := NewARPTelnet(&SwitchesConfig{Switches: *sw, BrandCMD: cmd, Flag: 1, TimeOut: 5})
+		if err != nil {
+			ms.log.Error("switch:", sw.Ip, err)
+		}
 		return err
 	}
 	err, _ := NewMacTelnet(&SwitchesConfig{Switches: *sw, BrandCMD: cmd, Flag: 0, TimeOut: 5})
+	if err != nil {
+		ms.log.Error("switch:", sw.Ip, err)
+	}
 	return err
 
 	// datas, err := ms.TelnetSwitch(sw)

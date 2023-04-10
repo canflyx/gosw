@@ -37,7 +37,7 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 }
 
 // QueryMacList mocks base method.
-func (m *MockService) QueryMacList(ctx context.Context, req *maclist.QueryMacRequest) (*maclist.MacSet, error) {
+func (m *MockService) QueryMacList(ctx context.Context, req *maclist.QueryKwRequest) (*maclist.MacSet, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "QueryMacList", ctx, req)
 	ret0, _ := ret[0].(*maclist.MacSet)

@@ -43,15 +43,15 @@ func NewMacList() *MacList {
 	return &MacList{}
 }
 
-// QueryMacRequest 获取Mac列表query string参数
-type QueryMacRequest struct {
+// QueryKwRequest 获取Mac列表query string参数
+type QueryKwRequest struct {
 	PageSize   int                    `json:"page_size,omitempty"`
 	PageNumber int                    `json:"page_number,omitempty"`
 	Keyword    map[string]interface{} `json:"kws"`
 }
 
-func NewMacRequest() *QueryMacRequest {
-	return &QueryMacRequest{
+func NewKwRequest() *QueryKwRequest {
+	return &QueryKwRequest{
 		PageSize:   20,
 		PageNumber: 1,
 	}
@@ -61,6 +61,7 @@ type ListData struct {
 	List    []int `json:"list"`
 	Value   int   `json:"value"`
 	ReadCmd []CMD `json:"read_cmd"`
+	Flag    int   `json:"flag"`
 }
 
 type CMD struct {
@@ -68,8 +69,8 @@ type CMD struct {
 	Flag string `json:"flag"`
 }
 
-func NewQueryMacFromHttp(r *http.Request) *QueryMacRequest {
-	req := NewMacRequest()
+func NewQueryMacFromHttp(r *http.Request) *QueryKwRequest {
+	req := NewKwRequest()
 	qs := r.URL.Query()
 	pss := qs.Get("page_size")
 	if pss != "" {
@@ -96,13 +97,24 @@ type MacSet struct {
 	Items []*MacList `json:"items"`
 }
 
+// 查询的返回数据
+type LogSet struct {
+	Total uint64     `json:"total"`
+	Items []*LogList `json:"items"`
+}
+type LogList struct {
+	Switch_IP  string `json:"switch_ip"`
+	Log        string `json:"log"`
+	Updated_At string `json:"UpdatedAt"`
+}
+
 func NewMacSet() *MacSet {
 	return &MacSet{}
 }
 
-func (req *QueryMacRequest) GetPageSize() int {
+func (req *QueryKwRequest) GetPageSize() int {
 	return int(req.PageSize)
 }
-func (req *QueryMacRequest) OffSet() int {
+func (req *QueryKwRequest) OffSet() int {
 	return int(req.PageNumber)
 }

@@ -1,6 +1,8 @@
 package api
 
 import (
+	"errors"
+
 	"github.com/canflyx/gosw/apps/maclist"
 	"github.com/gin-gonic/gin"
 	"github.com/infraboard/mcube/http/response"
@@ -18,6 +20,10 @@ func (h *Handler) scanSw(c *gin.Context) {
 		response.Failed(c.Writer, err)
 		return
 	}
+	if ins.Flag == 2 && len(ins.ReadCmd) < 1 {
+		response.Failed(c.Writer, errors.New("read cmd nil"))
+		return
+	}
 	err := h.svc.ScanSwitch(c.Request.Context(), ins)
 	if err != nil {
 		response.Failed(c.Writer, err)
@@ -33,9 +39,26 @@ func (h *Handler) scanSw(c *gin.Context) {
 // @Param object body {page_number: page_size: kws:{'field':'value'}} false "每页显示多少行，默认为20行"
 
 func (h *Handler) queryMacList(c *gin.Context) {
-	ins := maclist.NewMacRequest()
+	ins := maclist.NewKwRequest()
 	_ = c.ShouldBindJSON(ins)
 	set, err := h.svc.QueryMacList(c.Request.Context(), ins)
+	if err != nil {
+		response.Failed(c.Writer, err)
+		return
+	}
+	response.Success(c.Writer, set)
+}
+
+// @Summary 查询扫描后log
+// @Tags 查询 map
+// @Accept application/json
+// @Produce application/json
+// @Param object body {page_number: page_size: kws:{'field':'value'}} false "每页显示多少行，默认为20行"
+
+func (h *Handler) logList(c *gin.Context) {
+	ins := maclist.NewKwRequest()
+	_ = c.ShouldBindJSON(ins)
+	set, err := h.svc.QueryLogList(c.Request.Context(), ins)
 	if err != nil {
 		response.Failed(c.Writer, err)
 		return

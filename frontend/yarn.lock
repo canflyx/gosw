@@ -680,6 +680,11 @@
   "resolved" "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
   "version" "0.0.1"
 
+"core-js@^3.21.1":
+  "integrity" "sha512-hQotSSARoNh1mYPi9O2YaWeiq/cEB95kOrFb4NCrO4RIFt1qqNpKsaE+vy/L3oiqvND5cThqXzUU3r9F7Efztg=="
+  "resolved" "https://registry.npmjs.org/core-js/-/core-js-3.30.0.tgz"
+  "version" "3.30.0"
+
 "cross-spawn@^7.0.2", "cross-spawn@^7.0.3":
   "integrity" "sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w=="
   "resolved" "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz"
@@ -2450,7 +2455,7 @@
     "@volar/vue-language-core" "1.2.0"
     "@volar/vue-typescript" "1.2.0"
 
-"vue@^2.6.14 || ^3.2.0", "vue@^3.0.0-0 || ^2.6.0", "vue@^3.2.0", "vue@^3.2.25", "vue@^3.2.47", "vue@2 || 3", "vue@3.2.47":
+"vue@^2.6.14 || ^3.2.0", "vue@^3.0.0-0 || ^2.6.0", "vue@^3.2.0", "vue@^3.2.25", "vue@^3.2.31", "vue@^3.2.47", "vue@2 || 3", "vue@3.2.47":
   "integrity" "sha512-60188y/9Dc9WVrAZeUVSDxRQOZ+z+y5nO2ts9jWXSTkMvayiWxCWOWtBQoYjLeccfXkiiPZWAHcV+WTPhkqJHQ=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-3.2.47.tgz"
   "version" "3.2.47"
@@ -2460,6 +2465,14 @@
     "@vue/runtime-dom" "3.2.47"
     "@vue/server-renderer" "3.2.47"
     "@vue/shared" "3.2.47"
+
+"vue3-json-editor@^1.1.5":
+  "integrity" "sha512-p+hbl5SdMifA9brPt9TsG2HYB7Xy7xy98b61zcIusVpwhGtS5a0IwWPKM7BXcj9poIdc/bPs4AFchQOHIBq++w=="
+  "resolved" "https://registry.npmjs.org/vue3-json-editor/-/vue3-json-editor-1.1.5.tgz"
+  "version" "1.1.5"
+  dependencies:
+    "core-js" "^3.21.1"
+    "vue" "^3.2.31"
 
 "webpack-sources@^3.2.3":
   "integrity" "sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w=="

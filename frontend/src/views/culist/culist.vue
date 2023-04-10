@@ -9,6 +9,7 @@
     :pageName="pageName"
     :contentConfig="contentConfig"
     ref="pageContentRef"
+    :permission="permission"
   >
     <template #UpdatedAt="scope">
       <span>{{ $filters.formatTime(scope.row.UpdatedAt) }}</span>
@@ -25,7 +26,7 @@ import PageSearch from '@/components/page-search'
 import { searchConfig } from './config/search.config'
 import { IPermission } from '@/base-ui/table/types'
 
-const pageName = 'maclist'
+const pageName = 'culog'
 
 const permission: IPermission = {
   isCreate: false,

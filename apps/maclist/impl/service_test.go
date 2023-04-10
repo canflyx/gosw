@@ -12,7 +12,7 @@ import (
 )
 
 // func TestQueryMacList(t *testing.T) {
-// 	re := maclist.QueryMacRequest{PageSize: 10, PageNumber: 1, Keyword: nil}
+// 	re := maclist.QueryKwRequest{PageSize: 10, PageNumber: 1, Keyword: nil}
 // 	ctl := gomock.NewController(t)
 // 	c := []*maclist.MacList{
 // 		{MacAddrs: maclist.MacAddrs{MacAddress: "0000-0000-0000", Port: "ETH0", SwitchIp: "192.168.1.1"}, ARPIP: "192,168.3.2"},
@@ -46,6 +46,10 @@ func (t *TestRep) SaveARP(sws []*maclist.ARPList) error {
 	return nil
 }
 func (t *TestRep) QueryByKws(kws map[string]interface{}, i int, c int) (uint64, []*maclist.MacList) {
+	fmt.Println(kws, i, c)
+	return 1, nil
+}
+func (t *TestRep) QueryLogByKws(kws map[string]interface{}, i int, c int) (uint64, []*maclist.LogList) {
 	fmt.Println(kws, i, c)
 	return 1, nil
 }

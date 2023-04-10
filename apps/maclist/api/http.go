@@ -21,6 +21,7 @@ type Handler struct {
 func (h *Handler) Registry(r gin.IRouter) {
 	r.POST("/scan", h.scanSw)
 	r.POST("/list", h.queryMacList)
+	r.POST("/log", h.logList)
 }
 
 func (h *Handler) Config() error {

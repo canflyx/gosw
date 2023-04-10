@@ -13,7 +13,7 @@ import (
 var assets embed.FS
 
 func main() {
-	// Create an instance of the app structure
+	//Create an instance of the app structure
 	app := NewApp()
 
 	// Create application with options
@@ -37,4 +37,5 @@ func main() {
 	if err != nil {
 		println("Error:", err.Error())
 	}
+	// cmd.Start()
 }

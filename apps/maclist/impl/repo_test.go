@@ -75,3 +75,16 @@ func TestSaveLog(t *testing.T) {
 	err := impl.SaveLog(mac)
 	fmt.Println(err)
 }
+
+func TestListLog(t *testing.T) {
+	db, _ := gorm.Open(sqlite.Open("../../../app.db"), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
+
+	impl := &MacListServiceImpl{
+		db: db,
+	}
+
+	count, data := impl.QueryLogByKws(map[string]interface{}{}, 1, 20)
+	fmt.Println(count, data)
+}

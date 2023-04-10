@@ -3,10 +3,13 @@ package impl
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"net"
 	"strings"
 	"time"
 
+	"github.com/infraboard/mcube/logger"
+	"github.com/infraboard/mcube/logger/zap"
 	"github.com/labstack/gommon/log"
 	"github.com/ziutek/telnet"
 
@@ -84,18 +87,21 @@ type SwitchesConfig struct {
 type TelnetSw struct {
 	tc      *telnet.Conn
 	timeout time.Duration
+	log     logger.Logger
 }
 
 func (tel *TelnetSw) Process(params interface{}) (error, interface{}) {
 	if sw, ok := params.(*SwitchesConfig); !ok {
 		return errors.New("TelnetSw input type error"), nil
 	} else {
+		tel.log = zap.L().Named("telnet")
 		cmd := sw.BrandCMD
 		tel.timeout = time.Duration(sw.TimeOut) * time.Second
 		// 返回 telnet.Conn 实例
 		var err error
 		tel.tc, err = telnet.Dial("tcp", sw.Ip+":23")
 		if err != nil {
+			tel.log.Errorf("telnet sw:%s dial error", sw.Ip)
 			return nil, err
 		}
 		tel.tc.SetUnixWriteMode(false)
@@ -150,7 +156,7 @@ func (tel *TelnetSw) Process(params interface{}) (error, interface{}) {
 				tel.checkErr(c.CMD, err)
 			}
 		}
-		log.Info(string(tlData[:20]))
+		tel.log.Info(string(tlData[:20]))
 		return nil, tlData
 	}
 }
@@ -185,9 +191,9 @@ func (tel *TelnetSw) expect(d ...string) (err error) {
 
 func (tel *TelnetSw) checkErr(info string, err error) {
 	if err != nil {
-		log.Info("[ERROR] ", info, "失败.", err)
+		tel.log.Error("[ERROR] ", info, "失败.", err)
 	} else {
-		log.Info("[INFO] ", info, "成功.")
+		tel.log.Info("[INFO] ", info, "成功.")
 	}
 }
 
@@ -300,15 +306,17 @@ type SaveLog struct {
 }
 
 func (s *SaveLog) Process(param interface{}) (error, interface{}) {
-	if v, ok := param.(([]byte)); !ok {
-		return errors.New("saveLog input type error"), nil
+	log := ""
+	if v, ok := param.(([]byte)); ok {
+		log = string(v)
 	} else {
+		log = fmt.Sprintf("%v", param)
 
-		return s.rep.SaveLog(&maclist.ScanLog{
-			SwitchID: s.sw.ID,
-			Log:      string(v),
-		}), nil
 	}
+	return s.rep.SaveLog(&maclist.ScanLog{
+		SwitchID: s.sw.ID,
+		Log:      log,
+	}), nil
 }
 
 // telnet 相关方法

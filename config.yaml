@@ -7,11 +7,12 @@ app:
         enable_ssl: false
         cert_file: ""
         key_file: ""
+    telnettimeout: 5
 log:
     level: debug
     path_dir: logs
-    format: json
-    to: file
+    format: text
+    to: stdout
 sql_type:
     path: ./app.db
 telnet_cmds:
@@ -26,8 +27,10 @@ telnet_cmds:
           cmd_flag: ']'
         - cmd: screen-length 0
           cmd_flag: ']'
-      read_cmd: dis arp
+      read_cmd: []
+      access_cmd: dis mac-address
+      core_cmd: dis arp
       read_flag: ']'
       exit_cmds:
-        - cmd: screen-length 0
+        - cmd: screen-length 50
           cmd_flag: ']'

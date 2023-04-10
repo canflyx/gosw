@@ -13,6 +13,16 @@ const publicRoutes: RouteRecordRaw[] = [
         path: '/arplist',
         name: 'arplist',
         component: () => import('@/views/arp/arp.vue')
+      },
+      {
+        path: '/culist',
+        name: 'culist',
+        component: () => import('@/views/culist/culist.vue')
+      },
+      {
+        path: '/cuscan',
+        name: 'cuscan',
+        component: () => import('@/views/cuscan/cuscan.vue')
       }
     ]
   }

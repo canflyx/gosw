@@ -9,6 +9,7 @@ require (
 	github.com/go-playground/validator/v10 v10.10.0
 	github.com/golang/mock v1.6.0
 	github.com/infraboard/mcube v1.9.0
+	github.com/labstack/gommon v0.3.1
 	github.com/spf13/cobra v1.3.0
 	github.com/wailsapp/wails/v2 v2.4.1
 	github.com/ziutek/telnet v0.0.0-20180329124119-c3b780dc415b
@@ -31,7 +32,6 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/labstack/echo/v4 v4.9.0 // indirect
-	github.com/labstack/gommon v0.3.1 // indirect
 	github.com/leaanthony/go-ansi-parser v1.0.1 // indirect
 	github.com/leaanthony/gosod v1.0.3 // indirect
 	github.com/leaanthony/slicer v1.5.0 // indirect

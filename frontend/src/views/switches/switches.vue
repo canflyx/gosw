@@ -3,6 +3,7 @@
     :searchConfig="searchConfig"
     @queryBtnClick="handleQueryClick"
     @resetBtnClick="handleRestClick"
+    :permission="permission"
   ></page-search>
   <page-dialog
     :pageName="pageName"
@@ -19,11 +20,7 @@
     ref="pageContentRef"
   >
     <template #headHandler>
-      <el-button
-        type="primary"
-        v-if="permission?.isCreate"
-        @click="handleScanItem()"
-        :icon="Search"
+      <el-button type="primary" @click="handleScanItem()" :icon="Search"
         >扫描交换机</el-button
       >
     </template>
@@ -60,11 +57,12 @@ const permission: IPermission = {
   isCreate: true,
   isQuery: true,
   isUpdate: true,
-  isDelete: true
+  isDelete: true,
+  queryTitle: '搜索'
 }
 const store = mainStore()
 const handleScanItem = () => {
-  store.scanPageDataAction()
+  store.scanPageDataAction({ flag: 1 })
 }
 const newCallback = () => {
   const passwordItem = dialogConfig.formItem.find(

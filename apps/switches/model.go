@@ -54,7 +54,7 @@ func NewSwitchRequestById(id uint) *QuerySwitchRequestById {
 	}
 }
 
-// QueryMacRequest 获取Mac列表query string参数
+// QueryKwRequest 获取Mac列表query string参数
 
 // func NewQuerySwitchFromHttp(r *http.Request) *QuerySwitchRequest {
 // 	req := NewSwitchRequest()

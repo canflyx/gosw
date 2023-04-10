@@ -125,6 +125,10 @@ switch (props.pageName) {
     dataList = computed(() => store.switchesList)
     dataCount = computed(() => store.switchesCount)
     break
+  case 'culog':
+    dataList = computed(() => store.logList)
+    dataCount = computed(() => store.logCount)
+    break
 }
 
 // 3.获取其它动态插槽名称(一般在显示页面中自己定义)

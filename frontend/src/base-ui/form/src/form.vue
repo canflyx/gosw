@@ -89,7 +89,9 @@
             </div>
           </el-col>
         </template>
+        <slot name="other" />
       </el-row>
+
       <div class="footer">
         <slot name="footer" />
       </div>

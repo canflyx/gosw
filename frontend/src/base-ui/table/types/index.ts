@@ -11,4 +11,5 @@ export interface IPermission {
   isUpdate: boolean
   isDelete: boolean
   isQuery: boolean
+  queryTitle?: string
 }
