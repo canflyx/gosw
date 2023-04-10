@@ -166,7 +166,20 @@ func (s *Sqlite3) CreateTables() {
 		PRIMARY KEY (
 			id
 		)
-	);`
+	);
+	CREATE TABLE scan_logs (
+		id         INTEGER,
+		created_at DATETIME,
+		updated_at DATETIME,
+		deleted_at DATETIME,
+		switch_id  INTEGER,
+		log        TEXT,
+		PRIMARY KEY (
+			id
+		)
+	);
+	
+	`
 	if !db.Migrator().HasTable("switches") {
 		db.Exec(sql)
 	}

@@ -53,6 +53,7 @@ export const mainStore = defineStore('main', {
     async getPageListAction(payload: any) {
       const pageName = payload.pageName
       const queryInfo = payload.queryInfo
+      console.log(payload)
       if (payload.queryInfo) {
         queryInfo.value = this.queryInfo
       }

@@ -9,6 +9,7 @@
     :pageName="pageName"
     :contentConfig="contentConfig"
     ref="pageContentRef"
+    :permission="permission"
   >
     <template #UpdatedAt="scope">
       <span>{{ $filters.formatTime(scope.row.UpdatedAt) }}</span>
@@ -17,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import {} from 'vue'
 import { usePageSearch } from '@/hooks/use-page-search'
 import PageContent from '@/components/page-content'
 import { contentConfig } from './config/content.config'
