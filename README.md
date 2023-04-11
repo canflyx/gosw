@@ -1,6 +1,12 @@
 # 交换机批量运行工具
 
+gui 采用 wails 工具，如果自行编译先安装好 wails 最新版本
+
+https://wails.io/zh-Hans/docs/gettingstarted/installation/
+
 ## 完成功能
+
+![界面](main.png)
 
 自启动会生成 sqlite db 文件和 yaml 配置文件
 
@@ -44,13 +50,3 @@ telnet_cmds: #telnet 配置文件
       - cmd: screen-length 0
         cmd_flag: "]"
 ```
-
-## 未完成功能
-
-- 可自定义命令批量操作
-
-  - 测试改成责任链
-  - []byte 多个叠加
-  -
-
--
