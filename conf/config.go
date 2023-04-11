@@ -219,6 +219,19 @@ func newDefaultTelnetCmd() []*TelnetCmd {
 		ReadFlag:     "]",
 		ExitCmds:     []CMD{{"screen-length 50", "]"}},
 	}
-	cmds = append(cmds, defaultCmd)
+	CiscoCmd := &TelnetCmd{
+		Brand:        "ruijie",
+		UserFlag:     "ogin:",
+		PasswordFlag: "ssword:",
+		LoginFlag:    ">",
+		EnableCmd:    "enable",
+		EnableFlag:   "#",
+		Cmds:         []CMD{{"terminal length 0", "#"}},
+		AccessCmd:    "show mac",
+		CoreCmd:      "show arp",
+		ReadFlag:     "]",
+		ExitCmds:     []CMD{{"terminal length 50", "#"}},
+	}
+	cmds = append(cmds, defaultCmd, CiscoCmd)
 	return cmds
 }

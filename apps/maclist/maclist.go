@@ -11,7 +11,7 @@ type Service interface {
 	QueryMacList(ctx context.Context, req *QueryKwRequest) (*MacSet, error)
 	QueryLogList(ctx context.Context, req *QueryKwRequest) (*LogSet, error)
 	SaveAll(ctx context.Context, sw *switches.Switches, cmd []CMD) error
-	TelnetSwitch(sw *switches.Switches) ([]*MacList, error)
+	// TelnetSwitch(sw *switches.Switches) ([]*MacList, error)
 }
 
 type Repositoryer interface {

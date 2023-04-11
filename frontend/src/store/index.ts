@@ -34,7 +34,7 @@ export const mainStore = defineStore('main', {
         page_size: 1000,
         page_number: 0
       })
-
+      this.swList = []
       for (const sw of swData.data.items) {
         this.swList.push({ id: sw.ID, label: sw.ip })
       }
