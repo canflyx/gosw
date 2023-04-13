@@ -5,3 +5,4 @@ build/gosw.exe
 *.db
 *.sql
 logs/*
+gosw.rar

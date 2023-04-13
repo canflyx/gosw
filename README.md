@@ -50,3 +50,37 @@ telnet_cmds: #telnet 配置文件
       - cmd: screen-length 0
         cmd_flag: "]"
 ```
+
+## linux 编译环境
+
+需要安装 vue 及 golang 的环境，需要安装 libwebkit2gtk-4.0-dev 包，不需要桌面编译。
+
+- 安装 node，并下载依赖包
+  http://nodejs.cn/
+
+```shell
+  wget https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.xz
+  tar -xvf node-v10.15.3-linux-x64.tar.xz
+  mv node... /usr/local/node
+  vi /etc/profile
+  export NODE_HOME=/usr/local/node
+  export PATH=$NODE_HOME/BIN:$PATH
+
+  cd frontend/
+  npm install
+```
+
+- 安装 golang
+
+```shell
+ tar -C /usr/local -zxvf go1.20.3.linux-amd64.tar.gz
+ vim /etc/profile
+
+ export GOROOT=/usr/local/go
+ export PATH=$PATH:$GOROOT/bin
+
+ source /etc/profile
+ go mod tidy
+
+ wails build -upx
+```
