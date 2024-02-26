@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log/slog"
 	"net"
 	"strconv"
 	"strings"
@@ -11,15 +12,14 @@ import (
 	"github.com/canflyx/gosw/app"
 	"github.com/canflyx/gosw/apps/switches"
 	"github.com/canflyx/gosw/apps/tools"
-	"github.com/infraboard/mcube/logger"
-	"github.com/infraboard/mcube/logger/zap"
+	"github.com/canflyx/gosw/conf"
 	"gorm.io/gorm"
 )
 
 var _ switches.Service = (*SwitchService)(nil)
 
 type SwitchService struct {
-	log logger.Logger
+	log *slog.Logger
 	rep switches.Repositoryer
 }
 
@@ -28,6 +28,9 @@ func (sw *SwitchService) CreateSwitch(ctx context.Context, ins *switches.Switche
 	password, err := tools.EncryptByAes(ins.Password)
 	if err != nil {
 		return nil, errors.New("encrypt password error: ")
+	}
+	if ins.SwType == nil {
+		*ins.SwType = 0
 	}
 	if strings.Contains(ins.Ip, ";") {
 		ips := strings.Split(ins.Ip, ";")
@@ -39,6 +42,7 @@ func (sw *SwitchService) CreateSwitch(ctx context.Context, ins *switches.Switche
 				Ip:       ip,
 				User:     ins.User,
 				Password: password,
+				SwType:   ins.SwType,
 				IsCore:   ins.IsCore,
 				Brand:    ins.Brand,
 			})
@@ -67,6 +71,7 @@ func (sw *SwitchService) CreateSwitch(ctx context.Context, ins *switches.Switche
 				Ip:       newIp,
 				User:     ins.User,
 				Password: password,
+				SwType:   ins.SwType,
 				IsCore:   ins.IsCore,
 				Brand:    ins.Brand,
 			})
@@ -111,20 +116,21 @@ func (sw *SwitchService) UpdateSwitch(ctx context.Context, ins *switches.Switche
 	if ins.ID < 1 {
 		return nil, errors.New("id is nil")
 	}
-	if ins.Password == "******" {
+	if ins.Password == "******" || ins.Password == "" {
 		ins.Password = ""
-	}
-	if ins.Password != "" {
-		ins.Password, _ = tools.DecryptByAes(ins.Password)
+	} else {
+		ins.Password, _ = tools.EncryptByAes(ins.Password)
 	}
 	newSwitches :=
 		&switches.Switches{
 			Model: gorm.Model{
 				ID: ins.ID,
 			},
+			Ip:       ins.Ip,
 			User:     ins.User,
 			Password: ins.Password,
 			IsCore:   ins.IsCore,
+			SwType:   ins.SwType,
 			Brand:    ins.Brand,
 			Status:   ins.Status,
 			Note:     ins.Note,
@@ -149,7 +155,7 @@ func (sw *SwitchService) Name() string {
 }
 
 func (sw *SwitchService) Config() error {
-	sw.log = zap.L().Named("Switches")
+	sw.log = conf.GetNameLog("Switches")
 	// sw.db = conf.C().Sqlite.GetDB()
 	// NewSwitchImpl()
 	sw.rep = app.GetInternalApp("switches-impl").(*SwitchesServiceImpl)

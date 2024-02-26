@@ -11,6 +11,10 @@
     ref="pageContentRef"
     :permission="permission"
   >
+    <template #log="scope" >
+      <div  class="text-wrap"> <span>{{scope.row.log}}</span></div>
+    </template>
+
     <template #UpdatedAt="scope">
       <span>{{ $filters.formatTime(scope.row.UpdatedAt) }}</span>
     </template>
@@ -41,4 +45,10 @@ const permission: IPermission = {
 const [pageContentRef, handleRestClick, handleQueryClick] = usePageSearch()
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.text-wrap {
+ /* white-space: pre-line	;
+  text-align: left;
+  width: 100%;  仅为示例，可以根据需要设置宽度 */
+}
+</style>

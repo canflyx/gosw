@@ -53,17 +53,15 @@
                     @update:modelValue="handleValueChange($event, item.field)"
                   />
                 </template>
-                <template v-else-if="item.type === 'radio'">
+                <template v-else-if="item.type === 'el-radio-button'">
                   <el-radio-group
                     :model-value="modelValue[`${item.field}`]"
                     @update:modelValue="handleValueChange($event, item.field)"
                   >
                     <el-radio-button
                       v-for="opts in item.options"
-                      :key="opts.label"
-                      :label="opts.label"
-                      >{{ opts.value }}</el-radio-button
-                    >
+                     :label="opts.label"
+                     :value="opts.value" />
                   </el-radio-group>
                 </template>
                 <template v-else-if="item.type === 'select'">

@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/canflyx/gosw/apps/maclist"
+	"github.com/canflyx/gosw/conf"
 	"github.com/gin-gonic/gin"
 	"github.com/infraboard/mcube/http/response"
 )
@@ -20,8 +21,12 @@ func (h *Handler) scanSw(c *gin.Context) {
 		response.Failed(c.Writer, err)
 		return
 	}
-	if ins.Flag == 2 && len(ins.ReadCmd) < 1 {
-		response.Failed(c.Writer, errors.New("read cmd nil"))
+	if ins.Flag == 2 && len(ins.CuCms) < 2 {
+		response.Failed(c.Writer, errors.New("read custom cmds nil"))
+		return
+	}
+	if conf.ScanPool > 0 {
+		response.Failed(c.Writer, errors.New("scanning,please wait one minute to submit"))
 		return
 	}
 	err := h.svc.ScanSwitch(c.Request.Context(), ins)

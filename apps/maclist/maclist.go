@@ -10,7 +10,7 @@ type Service interface {
 	ScanSwitch(context.Context, ListData) error
 	QueryMacList(ctx context.Context, req *QueryKwRequest) (*MacSet, error)
 	QueryLogList(ctx context.Context, req *QueryKwRequest) (*LogSet, error)
-	SaveAll(ctx context.Context, sw *switches.Switches, cmd []CMD) error
+	SaveAll(ctx context.Context, sw *switches.Switches, cmds string) error
 	// TelnetSwitch(sw *switches.Switches) ([]*MacList, error)
 }
 

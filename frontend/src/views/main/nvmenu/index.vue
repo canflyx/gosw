@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
-      <el-radio-button v-if="isCollapse" :label="false">打开</el-radio-button>
-      <el-radio-button v-else :label="true">隐藏</el-radio-button>
+      <el-radio-button v-if="isCollapse" label="打开" :value="false" />
+      <el-radio-button v-else label="隐藏" :value="true" />
     </el-radio-group>
     <el-menu
       class="el-menu-vertical-demo"

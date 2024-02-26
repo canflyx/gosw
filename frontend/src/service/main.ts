@@ -27,6 +27,8 @@ export function updatePageDate(url: string, updateInfo: any) {
   })
 }
 export function scanPageData(url: string, list: any) {
+  console.log(list)
+
   return hfRequest.post({
     url: url,
     data: list

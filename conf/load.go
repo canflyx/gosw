@@ -3,7 +3,7 @@ package conf
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 
 	"github.com/BurntSushi/toml"
@@ -43,7 +43,7 @@ func LoadConfigFromJson(filePath string) error {
 	if err != nil {
 		fmt.Println(CreateConfig(defaultConfig, cfg))
 	}
-	jsonData, err := ioutil.ReadAll(jsonFile)
+	jsonData, err := io.ReadAll(jsonFile)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -59,10 +59,10 @@ func LoadConfigFromYaml(filePath string) error {
 	config := newConfig()
 	configFile := "config.yaml"
 
-	file, err := ioutil.ReadFile(configFile)
+	file, err := os.ReadFile(configFile)
 	if err != nil {
-		yamlData, err := yaml.Marshal(&config)
-		err = ioutil.WriteFile(configFile, yamlData, 0644)
+		yamlData, _ := yaml.Marshal(&config)
+		err = os.WriteFile(configFile, yamlData, 0644)
 		if err != nil {
 			fmt.Println("Unable to write data into the file")
 		}

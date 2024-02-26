@@ -6,7 +6,7 @@ type IFormType =
   | 'textarea'
   | 'text'
   | 'switch'
-  | 'radio'
+  | 'el-radio-button'
 
 export interface IFormItem {
   field: string

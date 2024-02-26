@@ -3,6 +3,7 @@ package protocol
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -10,8 +11,6 @@ import (
 	"github.com/canflyx/gosw/conf"
 	"github.com/gin-gonic/gin"
 	"github.com/infraboard/mcube/http/middleware/cors"
-	"github.com/infraboard/mcube/logger"
-	"github.com/infraboard/mcube/logger/zap"
 )
 
 // NewHTTPService 构建函数
@@ -31,7 +30,7 @@ func NewHttpService() *HttpService {
 	return &HttpService{
 		r:      r,
 		server: server,
-		l:      zap.L().Named("HTTP Service"),
+		l:      conf.GetNameLog("HTTP Service"),
 		c:      conf.C(),
 	}
 }
@@ -39,7 +38,7 @@ func NewHttpService() *HttpService {
 // HTTPService http服务
 type HttpService struct {
 	r      gin.IRouter
-	l      logger.Logger
+	l      *slog.Logger
 	c      *conf.Config
 	server *http.Server
 }
@@ -55,7 +54,7 @@ func (s *HttpService) Start() error {
 	app.LoadGinApp(s.PathPrefix(), s.r)
 
 	// 启动 HTTP服务
-	s.l.Infof("HTTP服务启动成功, 监听地址: %s", s.server.Addr)
+	s.l.Info("HTTP服务启动成功, 监听地址:" + s.server.Addr)
 	if err := s.server.ListenAndServe(); err != nil {
 		if err == http.ErrServerClosed {
 			s.l.Info("service is stopped")
@@ -72,7 +71,7 @@ func (s *HttpService) Stop() error {
 	defer cancel()
 	// 优雅关闭HTTP服务
 	if err := s.server.Shutdown(ctx); err != nil {
-		s.l.Errorf("graceful shutdown timeout, force exit")
+		s.l.Error("graceful shutdown timeout, force exit")
 	}
 	return nil
 }

@@ -14,6 +14,7 @@ type Switches struct {
 	Brand    string `json:"brand" `
 	Password string `json:"password" binding:"required"`
 	IsCore   *int   `gorm:"force" json:"iscore" validator:"required" binding:"required"`
+	SwType   *int   `gorm:"force" json:"swtype" validator:"required" binding:"required"`
 	Status   *int   `gorm:"force" json:"status"`
 	Note     string `json:"note"`
 }

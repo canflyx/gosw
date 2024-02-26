@@ -83,6 +83,7 @@ class HFRequest {
     // 外面调用需要返回数据
     return new Promise((resolve, reject) => {
       // 1.单个请求对请求config的处理
+      console.log("new Promise:",config.method,config.url)
       if (config.interceptors?.requestInterceptor) {
         config = config.interceptors.requestInterceptor(config)
       }

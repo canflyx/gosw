@@ -25,7 +25,8 @@ export const mainStore = defineStore('main', {
       queryInfo: {},
       selectItem: new Set(),
       tags: [] as any[],
-      readCmd: []
+      readCmd:"",
+      scanDisable:""
     }
   },
   actions: {
@@ -85,20 +86,21 @@ export const mainStore = defineStore('main', {
       await deletePageDate(pageUrl)
       this.getPageListAction({ pageName: pageName })
     },
-    scanPageDataAction(payload: any) {
+    async scanPageDataAction(payload: any) {
       if (this.selectItem.size > 0) {
+        this.scanDisable="Disable"
         const pageUrl = '/maclist/scan'
-        scanPageData(pageUrl, {
-          list: this.selectItem,
-          read_cmd: this.readCmd,
+        await scanPageData(pageUrl, {
+          list: [...this.selectItem],
+          cu_cmds: this.readCmd,
           flag: payload.flag
         })
+        this.scanDisable=""
       }
     },
-    scanSwDataAction() {
+    async scanSwDataAction() {
       if (
         this.tags.length < 1 ||
-        !Array.isArray(this.readCmd) ||
         this.readCmd.length < 1
       ) {
         return
@@ -107,6 +109,7 @@ export const mainStore = defineStore('main', {
       for (const tag of this.tags) {
         this.selectItem.add(tag.id)
       }
+      console.log("selectitem",this.selectItem)
       this.scanPageDataAction({ flag: 2 })
     }
   }

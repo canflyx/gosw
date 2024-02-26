@@ -26,7 +26,7 @@
       ></el-table-column>
 
       <template v-for="item in propList" :key="item.prop">
-        <el-table-column v-bind="item" align="center" show-overflow-tooltip>
+        <el-table-column v-bind="item" align="left" show-overflow-tooltip>
           <!-- 此处默认是有一个 #default的插槽 scope.row 取行，item.prop 相当于 name-->
           <template #default="scope">
             <!-- 为了不把 slot 写死，在propList中增加一个 slotName来定义哪些是需要格式化值的。

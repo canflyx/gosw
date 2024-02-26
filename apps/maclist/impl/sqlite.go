@@ -1,10 +1,10 @@
 package impl
 
 import (
+	"log/slog"
+
 	"github.com/canflyx/gosw/app"
 	"github.com/canflyx/gosw/conf"
-	"github.com/infraboard/mcube/logger"
-	"github.com/infraboard/mcube/logger/zap"
 	"gorm.io/gorm"
 )
 
@@ -12,13 +12,13 @@ var impl = &MacListServiceImpl{}
 
 func NewSwitchImpl() *MacListServiceImpl {
 	return &MacListServiceImpl{
-		l:  zap.L().Named("Switch"),
+		l:  conf.GetNameLog("Switch"),
 		db: conf.C().Sqlite.GetDB(),
 	}
 }
 
 type MacListServiceImpl struct {
-	l  logger.Logger
+	l  *slog.Logger
 	db *gorm.DB
 }
 
@@ -27,7 +27,7 @@ func (sw *MacListServiceImpl) Name() string {
 }
 
 func (sw *MacListServiceImpl) Config() error {
-	sw.l = zap.L().Named("MacListImpl")
+	sw.l = conf.GetNameLog("MacListImpl")
 	sw.db = conf.C().Sqlite.GetDB()
 	return nil
 }

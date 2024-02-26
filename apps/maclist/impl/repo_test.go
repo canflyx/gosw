@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/canflyx/gosw/apps/maclist"
-	"gorm.io/driver/sqlite"
+	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -68,7 +68,7 @@ func TestSaveLog(t *testing.T) {
 	}
 
 	mac := &maclist.ScanLog{
-		SwitchID: 11,
+		SwitchIP: "192.168.1.1",
 		Log:      "192.168.1.1",
 	}
 

@@ -16,6 +16,12 @@ export const contentConfig: IContent = {
       minWidth: '30',
       slotName: 'iscore'
     },
+    {
+      prop: 'swtype',
+      label: '协议',
+      minWidth: '30',
+      slotName: 'swtype'
+    },
     { prop: 'status', label: '状态', minWidth: '30', slotName: 'status' },
     { label: '操作', minWidth: '80', slotName: 'handle' }
   ],

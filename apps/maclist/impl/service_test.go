@@ -1,12 +1,9 @@
 package impl
 
 import (
-	"context"
 	"fmt"
-	"testing"
 
 	"github.com/canflyx/gosw/apps/maclist"
-	"github.com/canflyx/gosw/apps/switches"
 	"github.com/canflyx/gosw/conf"
 	"github.com/infraboard/mcube/logger/zap"
 )
@@ -58,28 +55,28 @@ func (t *TestRep) DescBySWIP(kws map[string]interface{}) []*maclist.MacAddrs {
 	return nil
 }
 
-func TestSaveAll(t *testing.T) {
-	core := 1
-	err := conf.LoadConfigFromYaml("config.yaml")
-	if err := loadGlobalLogger(); err != nil {
-		fmt.Println(err)
-	}
-	sws := &switches.Switches{
-		Ip:       "172.17.80.1",
-		User:     "daika",
-		Password: "daika2018",
-		IsCore:   &core,
-	}
-	a := &MacListService{
-		rep: &TestRep{},
-		log: zap.L().Named("maclist"),
-	}
-	c := []maclist.CMD{{Cmd: "dis users", Flag: "]"}, {Cmd: "dis ver", Flag: "]"}}
-	err = a.SaveAll(context.Background(), sws, c)
-	if err != nil {
-		fmt.Println(err)
-	}
-}
+// func TestSaveAll(t *testing.T) {
+// 	core := 1
+// 	err := conf.LoadConfigFromYaml("config.yaml")
+// 	if err := loadGlobalLogger(); err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	sws := &switches.Switches{
+// 		Ip:       "172.17.80.1",
+// 		User:     "dai",
+// 		Password: "dai2018",
+// 		IsCore:   &core,
+// 	}
+// 	a := &MacListService{
+// 		rep: &TestRep{},
+// 		log: conf.GetNameLog("maclist"),
+// 	}
+// 	c := []conf.CMD{{CMD: "dis users", CMDFlag: "]"}, {CMD: "dis ver", CMDFlag: "]"}}
+// 	err = a.SaveAll(context.Background(), sws, c)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// }
 
 func loadGlobalLogger() error {
 	var (
@@ -113,6 +110,6 @@ func loadGlobalLogger() error {
 	if err := zap.Configure(zapConfig); err != nil {
 		return err
 	}
-	zap.L().Named("INIT").Info(logInitMsg)
+	conf.GetNameLog("INIT").Info(logInitMsg)
 	return nil
 }

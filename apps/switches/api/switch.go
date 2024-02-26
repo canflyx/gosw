@@ -64,6 +64,7 @@ func (h *Handler) updateSw(c *gin.Context) {
 		response.Failed(c.Writer, err)
 		return
 	}
+
 	ins.ID = uint(id)
 	set, err := h.svc.UpdateSwitch(c.Request.Context(), ins)
 	if err != nil {

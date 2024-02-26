@@ -3,16 +3,19 @@ package conf
 import (
 
 	// _ "github.com/go-sql-driver/mysql"
+	"log/slog"
 	"sync"
 	"time"
 
-	"gorm.io/driver/sqlite"
+	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
 var (
-	db *gorm.DB
+	db       *gorm.DB
+	Zlog     *slog.Logger
+	ScanPool int
 )
 
 func newConfig() *Config {
@@ -22,6 +25,9 @@ func newConfig() *Config {
 		Sqlite:     newDefaultSqlite(),
 		TelnetCmds: newDefaultTelnetCmd(),
 	}
+}
+func GetNameLog(name string) *slog.Logger {
+	return Zlog.With(slog.Group("a", slog.String("n", name)))
 }
 
 // Config 应用配置
@@ -33,7 +39,7 @@ type Config struct {
 }
 
 func (c *Config) TelnetCmd() map[string]TelnetCmd {
-	var brandMap = make(map[string]TelnetCmd)
+	brandMap := make(map[string]TelnetCmd)
 	if len(c.TelnetCmds) < 1 {
 		return nil
 	}
@@ -55,7 +61,7 @@ func newDefaultAPP() *App {
 		Name: "go-switch",
 		// EncryptKey: "defualt app encrypt key",
 		HTTP:          newDefaultHTTP(),
-		TelnetTimeout: 5,
+		TelnetTimeout: 10,
 	}
 }
 func (a *App) GetTime() time.Duration {
@@ -92,7 +98,7 @@ func newDefaultLog() *log {
 	return &log{
 		Level:   "debug",
 		PathDir: "logs",
-		Format:  "text",
+		Format:  "json",
 		To:      "stdout",
 	}
 }
@@ -160,6 +166,7 @@ func (s *Sqlite3) CreateTables() {
 		user       TEXT,
 		password   TEXT,
 		is_core    INTEGER,
+		sw_type       INTEGER,
 		status     INTEGER,
 		brand      STRING,
 		note       TEXT,
@@ -172,7 +179,7 @@ func (s *Sqlite3) CreateTables() {
 		created_at DATETIME,
 		updated_at DATETIME,
 		deleted_at DATETIME,
-		switch_id  INTEGER,
+		switch_ip       INTEGER,
 		log        TEXT,
 		PRIMARY KEY (
 			id
@@ -187,17 +194,18 @@ func (s *Sqlite3) CreateTables() {
 
 type TelnetCmd struct {
 	Brand        string `json:"brand" yaml:"brand"`
-	UserFlag     string `json:"user_flag" yaml:"user_flag"`
+	UserFlag     string `json:"user_flag" yaml:"user_flag"` //为登录和自定义运行的默认flag
 	PasswordFlag string `json:"password_flag" yaml:"password_flag"`
 	LoginFlag    string `json:"login_flag" yaml:"login_flag"`
 	EnableCmd    string `json:"enable_cmd" yaml:"enable_cmd" `
 	EnableFlag   string `json:"enable_flag" yaml:"enable_flag"`
-	Cmds         []CMD  `json:"cmds" yaml:"cmds"`
-	ReadCmd      []CMD  `json:"read_cmd" yaml:"read_cmd"`
+	PreCmd       []CMD  `json:"pre_cmd" yaml:"pre_cmd"`
+	UserCmd      []CMD  `json:"user_cmd" yaml:"user_cmd"`
+	EnCmd        []CMD  `json:"en_cmd" yaml:"en_cmd"`
 	AccessCmd    string `json:"access_cmd" yaml:"access_cmd"`
 	CoreCmd      string `json:"core_cmd" yaml:"core_cmd"`
-	ReadFlag     string `json:"read_flag" yaml:"read_flag"`
-	ExitCmds     []CMD  `json:"exit_cmds"  yaml:"exit_cmds"`
+	ReadFlag     string `json:"read_flag" yaml:"read_flag"` // 读取 mac-address 或 arp flag
+	ExitCmd      []CMD  `json:"exit_cmd"  yaml:"exit_cmd"`
 }
 type CMD struct {
 	CMD     string `json:"cmd" yaml:"cmd"`
@@ -213,11 +221,11 @@ func newDefaultTelnetCmd() []*TelnetCmd {
 		LoginFlag:    ">",
 		EnableCmd:    "sys",
 		EnableFlag:   "]",
-		Cmds:         []CMD{{"user-interface vty 0 4", "]"}, {"screen-length 0", "]"}},
+		PreCmd:       []CMD{{"sys", "]"}, {"user-interface vty 0 4", "]"}, {"screen-length 0", "]"}, {"quit", ""}, {"quit", ">"}},
 		AccessCmd:    "dis mac-address",
 		CoreCmd:      "dis arp",
-		ReadFlag:     "]",
-		ExitCmds:     []CMD{{"screen-length 50", "]"}},
+		ReadFlag:     ">",
+		ExitCmd:      []CMD{{"sys", "]"}, {"user-interface vty 0 4", "]"}, {"screen-length 50", "]"}, {"quit", ""}, {"quit", ""}, {"quit", ""}},
 	}
 	CiscoCmd := &TelnetCmd{
 		Brand:        "ruijie",
@@ -226,12 +234,25 @@ func newDefaultTelnetCmd() []*TelnetCmd {
 		LoginFlag:    ">",
 		EnableCmd:    "enable",
 		EnableFlag:   "#",
-		Cmds:         []CMD{{"terminal length 0", "#"}},
+		PreCmd:       []CMD{{"terminal length 0", "#"}},
 		AccessCmd:    "show mac",
 		CoreCmd:      "show arp",
-		ReadFlag:     "]",
-		ExitCmds:     []CMD{{"terminal length 50", "#"}},
+		ReadFlag:     ">",
+		ExitCmd:      []CMD{{"terminal length 50", "#"}},
 	}
-	cmds = append(cmds, defaultCmd, CiscoCmd)
+	H3CCmd := &TelnetCmd{
+		Brand:        "h3c",
+		UserFlag:     "ogin:",
+		PasswordFlag: "ssword:",
+		LoginFlag:    ">",
+		EnableCmd:    "enable",
+		EnableFlag:   "]",
+		PreCmd:       []CMD{{"sys", "]"}, {"user-interface vty 0 4", "]"}, {"screen-length 0", "]"}, {"quit", "]"}, {"quit", ">"}},
+		AccessCmd:    "dis mac-address",
+		CoreCmd:      "dis arp",
+		ReadFlag:     ">",
+		ExitCmd:      []CMD{{"sys", "]"}, {"user-interface vty 0 4", "]"}, {"undo screen-length", "]"}, {"quit", "]"}, {"quit", ">"}, {"quit", ""}},
+	}
+	cmds = append(cmds, defaultCmd, CiscoCmd, H3CCmd)
 	return cmds
 }

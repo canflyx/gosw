@@ -22,7 +22,7 @@ telnet_cmds:
       login_flag: '>'
       enable_cmd: sys
       enable_flag: ']'
-      cmds:
+      en_cmd:
         - cmd: user-interface vty 0 4
           cmd_flag: ']'
         - cmd: screen-length 0

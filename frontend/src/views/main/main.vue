@@ -16,6 +16,12 @@
 <script setup lang="ts">
 import AppMenu from './nvmenu/index.vue'
 // import AppMain from './components/AppMain/index.vue'
+
+</script>
+<script lang="ts">
+export default {
+  name: 'MainIt'
+}
 </script>
 <style scoped>
 .common-layout {

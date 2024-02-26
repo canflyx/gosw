@@ -32,7 +32,7 @@ func (sw *SwitchesServiceImpl) QueryByKws(kws map[string]interface{}, offset, pa
 	Db := sw.db
 
 	if v, ok := kws["ip"]; ok {
-		if v != nil || v != "" {
+		if v != nil {
 			Db = Db.Where(fmt.Sprintf("ip LIKE '%%%s%%'", v))
 		}
 	}

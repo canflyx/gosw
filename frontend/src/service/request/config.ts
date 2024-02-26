@@ -1,5 +1,5 @@
 let BASE_URL = ''
-let TIME_OUT = 10000
+const TIME_OUT = 1500
 
 if (process.env.NODE_ENV === 'development') {
   BASE_URL = 'http://127.0.0.1:8055/api/v1'
@@ -9,4 +9,4 @@ if (process.env.NODE_ENV === 'development') {
   BASE_URL = 'http://127.0.0.1:8055/api/v1'
 }
 
-export { BASE_URL, TIME_OUT }
+export { BASE_URL,TIME_OUT }

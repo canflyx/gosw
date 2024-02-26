@@ -46,11 +46,11 @@ export const dialogConfig: IForm = {
     {
       field: 'iscore',
       label: '类型:',
-      type: 'radio',
+      type: 'el-radio-button',
       placeholder: '交换机状态',
       options: [
-        { label: 0, value: '接入' },
-        { label: 1, value: '核心' }
+        { label: '接入', value: 0 },
+        { label: '核心',value:1 }
       ]
       // options: [
       //   { label: '接入', value: 1 },
@@ -59,6 +59,16 @@ export const dialogConfig: IForm = {
       // rules: [
       //   { required: true, message: '交换机类型必须选择', trigger: 'blur' }
       // ]
+    },
+    {
+      field: 'swtype',
+      label: '协议:',
+      type: 'el-radio-button',
+      placeholder: '远程协议',
+      options: [
+        { label: 'Telnet', value: 0 },
+        { label: 'SSH',value:1 }
+      ]
     },
     {
       field: 'status',

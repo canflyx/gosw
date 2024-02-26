@@ -28,7 +28,7 @@ type ARPList struct {
 }
 type ScanLog struct {
 	gorm.Model
-	SwitchID uint   `json:"switch_id"`
+	SwitchIP string `json:"switch_ip"`
 	Log      string `json:"log"`
 }
 
@@ -58,10 +58,10 @@ func NewKwRequest() *QueryKwRequest {
 }
 
 type ListData struct {
-	List    []int `json:"list"`
-	Value   int   `json:"value"`
-	ReadCmd []CMD `json:"read_cmd"`
-	Flag    int   `json:"flag"`
+	List  []int  `json:"list"`
+	Value int    `json:"value"`
+	CuCms string `json:"cu_cmds"`
+	Flag  int    `json:"flag"`
 }
 
 type CMD struct {
@@ -102,6 +102,7 @@ type LogSet struct {
 	Total uint64     `json:"total"`
 	Items []*LogList `json:"items"`
 }
+
 type LogList struct {
 	Switch_IP  string `json:"switch_ip"`
 	Log        string `json:"log"`

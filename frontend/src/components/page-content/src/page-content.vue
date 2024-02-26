@@ -141,9 +141,9 @@ const otherPropSlots = props.contentConfig?.propList.filter((item: any) => {
 })
 
 const selectionChange = (value: any) => {
-  store.selectItem = []
+  store.selectItem = new Set()
   for (const item of value) {
-    store.selectItem.push(item.ID)
+    store.selectItem.add(item.ID)
   }
 }
 

@@ -37,14 +37,15 @@
           {{ tag.label }}
         </el-tag>
       </el-card>
-      <div class="jsonedit">
-        <Vue3JsonEditor
-          v-model="json"
-          :show-btns="false"
-          :expandedOnStart="true"
-          mode="code"
-          @json-change="onJsonChange"
-        />
+
+        <div class="jsonedit">
+          <el-input
+      v-model=store.readCmd
+      style="width: 100%"
+      placeholder="多命令以';'分割,命令与flag以','分割,如flag为`>`可不写,例:show version;enable,]"
+      show-word-limit
+      type="textarea"
+    />
       </div>
     </template>
   </page-search>
@@ -58,7 +59,8 @@ import { mainStore } from '@/store'
 import { ElTree, ElMessage } from 'element-plus'
 import { TreeNodeData } from 'element-plus/es/components/tree/src/tree.type'
 import { IPermission } from '@/base-ui/table/types'
-import { Vue3JsonEditor } from 'vue3-json-editor'
+
+
 
 const permission: IPermission = {
   isCreate: true,
@@ -100,11 +102,18 @@ const filterNode = (value: string, data: TreeNodeData) => {
   if (!value) return true
   return data.label.includes(value)
 }
-
 const store = mainStore()
 onMounted(() => {
   store.getInitial()
 })
+
+
+const handleRestClick = () => {
+  treeRef.value!.setCheckedKeys([], false)
+  filterText.value = ''
+}
+
+
 
 const handleQueryClick = () => {
   // console.log(JSON.parse(queryInfo))
@@ -112,19 +121,9 @@ const handleQueryClick = () => {
     ElMessage({ showClose: true, message: '没有选择交换机', type: 'error' })
     return
   }
+  // if (!Array.isArray(json.value) ) return
+  // console.log("editor",store.readCmd)
   store.scanSwDataAction()
-}
-const handleRestClick = () => {
-  treeRef.value!.setCheckedKeys([], false)
-  filterText.value = ''
-}
-
-// json 编辑器处理
-const json = ref([{ cmd: 'show users', flag: ']' }])
-
-const onJsonChange = (value: []) => {
-  if (!Array.isArray(value) || value.length < 1) return
-  store.readCmd = value
 }
 </script>
 

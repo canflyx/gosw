@@ -31,6 +31,10 @@
       <span v-if="scope.row.iscore === 1">核心</span>
       <span v-else>接入</span>
     </template>
+    <template #swtype="scope">
+      <span v-if="scope.row.swtype === 0">Telnet</span>
+      <span v-else>SSH</span>
+    </template>
     <template #status="scope">
       <span v-if="scope.row.status === 1">禁用</span>
       <span v-else>正常</span>

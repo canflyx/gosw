@@ -3,7 +3,7 @@ package conf
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"reflect"
 	"testing"
@@ -11,7 +11,7 @@ import (
 
 func TestConfig(t *testing.T) {
 	LoadConfigFromToml("../dist/config.toml")
-	fmt.Printf("%+v\n", *&global.App.Name)
+	fmt.Printf("%+v\n", global.App.Name)
 }
 
 func TestJsonConfig(t *testing.T) {
@@ -19,7 +19,7 @@ func TestJsonConfig(t *testing.T) {
 	if err != nil {
 		return
 	}
-	jsonData, err := ioutil.ReadAll(jsonFile)
+	jsonData, err := io.ReadAll(jsonFile)
 	if err != nil {
 		return
 	}

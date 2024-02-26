@@ -8,6 +8,7 @@ import (
 
 	"github.com/canflyx/gosw/app"
 	_ "github.com/canflyx/gosw/apps/all"
+	"github.com/canflyx/gosw/apps/tools"
 	"github.com/canflyx/gosw/conf"
 	"github.com/spf13/cobra"
 )
@@ -23,9 +24,7 @@ var StartCmd = &cobra.Command{
 		if err != nil {
 			fmt.Println(err)
 		}
-		if err := loadGlobalLogger(); err != nil {
-			return err
-		}
+		conf.Zlog = tools.SlogInit()
 		// 初始化全局app
 		if err := app.InitAllApp(); err != nil {
 			return err
@@ -44,7 +43,7 @@ func (m *manager) WaitStop(ch <-chan os.Signal) {
 	for v := range ch {
 		switch v {
 		default:
-			m.l.Infof("received signal:%s", v)
+			m.l.Info("received signal:%s", v)
 			m.http.Stop()
 		}
 	}

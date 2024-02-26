@@ -13,6 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+.el-popper {
+  max-width: 60% !important;
+  text-align: left;
+
+  white-space:pre-line	;
+}
 
 a {
   font-weight: 500;
