@@ -40,7 +40,10 @@ func (h *Handler) scanSw(c *gin.Context) {
 
 func (h *Handler) queryMacList(c *gin.Context) {
 	ins := maclist.NewKwRequest()
-	_ = c.ShouldBindJSON(ins)
+	if err := c.ShouldBindJSON(ins); err != nil {
+		response.Failed(c.Writer, err)
+		return
+	}
 	set, err := h.svc.QueryMacList(c.Request.Context(), ins)
 	if err != nil {
 		response.Failed(c.Writer, err)
@@ -57,7 +60,10 @@ func (h *Handler) queryMacList(c *gin.Context) {
 
 func (h *Handler) logList(c *gin.Context) {
 	ins := maclist.NewKwRequest()
-	_ = c.ShouldBindJSON(ins)
+	if err := c.ShouldBindJSON(ins); err != nil {
+		response.Failed(c.Writer, err)
+		return
+	}
 	set, err := h.svc.QueryLogList(c.Request.Context(), ins)
 	if err != nil {
 		response.Failed(c.Writer, err)

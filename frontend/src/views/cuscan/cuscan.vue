@@ -80,18 +80,8 @@ const treeRef = ref<InstanceType<typeof ElTree>>()
 const tags = ref<Tree[]>([])
 const handleCheckChange = () => {
   //   去掉 children 根结点
-  const tag1 = treeRef.value!.getCheckedNodes() as Tree[]
-  const tagsOk = [] as Tree[]
-  for (const tag of tag1) {
-    if (tag.children) {
-      continue
-    } else {
-      if (!tagsOk.includes(tag)) {
-        tagsOk.push(tag)
-      }
-    }
-  }
-  tags.value = tagsOk
+  const tag = treeRef.value!.getCheckedNodes() as Tree[]
+  tags.value = tag.filter((item) => item.children == null)
 }
 // 监听过滤条件
 watch(filterText, (val) => {
@@ -102,8 +92,8 @@ watch(tags, () => {
   store.tags = tags.value
 })
 // tags 关闭事件，去掉 tree 选择
-const handleClose = (tag: any) => {
-  treeRef.value!.setChecked(tag.id, false, false)
+const handleClose = (value: any) => {
+  treeRef.value!.setChecked(value.id, false, false)
 }
 // 树型过滤
 const filterNode = (value: string, data: TreeNodeData) => {

@@ -23,7 +23,7 @@ export const mainStore = defineStore('main', {
       logCount: 0,
       swList: [] as SwLister[],
       queryInfo: {},
-      selectItem: [] as number[],
+      selectItem: new Set(),
       tags: [] as any[],
       readCmd: []
     }
@@ -86,7 +86,7 @@ export const mainStore = defineStore('main', {
       this.getPageListAction({ pageName: pageName })
     },
     scanPageDataAction(payload: any) {
-      if (this.selectItem.length > 0) {
+      if (this.selectItem.size > 0) {
         const pageUrl = '/maclist/scan'
         scanPageData(pageUrl, {
           list: this.selectItem,
@@ -103,9 +103,9 @@ export const mainStore = defineStore('main', {
       ) {
         return
       }
-      this.selectItem = []
+      this.selectItem.clear()
       for (const tag of this.tags) {
-        this.selectItem.push(tag.id)
+        this.selectItem.add(tag.id)
       }
       this.scanPageDataAction({ flag: 2 })
     }
