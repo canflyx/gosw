@@ -66,8 +66,8 @@ func TestSaveAll(t *testing.T) {
 	}
 	sws := &switches.Switches{
 		Ip:       "172.17.80.1",
-		User:     "daika",
-		Password: "daika2018",
+		User:     "dai",
+		Password: "dai2018",
 		IsCore:   &core,
 	}
 	a := &MacListService{
