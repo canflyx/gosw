@@ -55,6 +55,7 @@ func (t *TestRep) DescBySWIP(kws map[string]interface{}) []*maclist.MacAddrs {
 	return nil
 }
 
+<<<<<<< HEAD
 // func TestSaveAll(t *testing.T) {
 // 	core := 1
 // 	err := conf.LoadConfigFromYaml("config.yaml")
@@ -77,6 +78,30 @@ func (t *TestRep) DescBySWIP(kws map[string]interface{}) []*maclist.MacAddrs {
 // 		fmt.Println(err)
 // 	}
 // }
+=======
+func TestSaveAll(t *testing.T) {
+	core := 1
+	err := conf.LoadConfigFromYaml("config.yaml")
+	if err := loadGlobalLogger(); err != nil {
+		fmt.Println(err)
+	}
+	sws := &switches.Switches{
+		Ip:       "172.17.80.1",
+		User:     "dai",
+		Password: "dai2018",
+		IsCore:   &core,
+	}
+	a := &MacListService{
+		rep: &TestRep{},
+		log: zap.L().Named("maclist"),
+	}
+	c := []maclist.CMD{{Cmd: "dis users", Flag: "]"}, {Cmd: "dis ver", Flag: "]"}}
+	err = a.SaveAll(context.Background(), sws, c)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+>>>>>>> 2f3aec7f5f955a6e829def2cfa6a70188d4a36b7
 
 func loadGlobalLogger() error {
 	var (

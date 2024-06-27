@@ -11,11 +11,19 @@ import (
 
 func TestProcess(t *testing.T) {
 	core := 1
+<<<<<<< HEAD
 	conf.LoadConfigFromEnv()
 	confs := conf.C().TelnetCmd()
 	v, ok := confs["default"]
 	if !ok {
 		fmt.Print("config error")
+=======
+	a := switches.Switches{
+		Ip:       "172.17.80.1",
+		User:     "dai",
+		Password: "dai2018",
+		IsCore:   &core,
+>>>>>>> 2f3aec7f5f955a6e829def2cfa6a70188d4a36b7
 	}
 	// v.UserCmd = tools.FormatCmd("dis users;dis esn")
 	v.ReadFlag = ">"
