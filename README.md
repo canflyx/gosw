@@ -1,3 +1,10 @@
+# 最新
+
+所有版本升级至 2024.6 最新版本，go ver 1.22.2
+
+- windows wails 编译
+  wails build -webview2 embed
+
 # 交换机批量运行工具
 
 gui 采用 wails 工具，如果自行编译先安装好 wails 最新版本
@@ -8,7 +15,7 @@ https://wails.io/zh-Hans/docs/gettingstarted/installation/
 
 ![界面](main.png)
 
-自启动会生成 sqlite db 文件和 yaml 配置文件
+自启动会生成 sqlite db 文件和 yaml 配置文件，默认为 ">",可以不写
 
 - 交换机扫描功能
   测试 huawei/h3c 无问题。其它品牌可以通过 配置文件中一一对应。
@@ -38,17 +45,40 @@ telnet_cmds: #telnet 配置文件
     login_flag: ">" #登陆成功后显示标识
     enable_cmd: sys #进入配置模式
     enable_flag: "]" #进入配置模式后的显示标识
-    cmds: # 其它命令,为 [cmd,cmd_flag] 的数组,必须命令和标识一一对应
+    pre_cmd: # 预处理命令,为 [cmd,cmd_flag] 的数组,必须命令和标识一一对应
+      - cmd: sys
+        cmd_flag: "]"
       - cmd: user-interface vty 0 4
         cmd_flag: "]"
       - cmd: screen-length 0
         cmd_flag: "]"
-    read_cmd: dis mac-add #需要读取终端执行的命令
-    core_cmd: dis arp # 与 read_cmd 二选一，现阶段此为核心交换机需要执行的
-    read_flag: "]"
-    exit_cmds: #退出之前执行的命令
-      - cmd: screen-length 0
+      - cmd: quit
+        cmd_flag: ""
+      - cmd: quit
+        cmd_flag: ">"
+    user_cmd: [] #用于自定义批处理命令。
+     access_cmd: dis mac-address #读取 mac-address命令
+    core_cmd: dis arp    #读取arp与ip的对应表
+    read_flag: ">"   #针对前两项的读取标志
+    exit_cmd: #退出命令,一般与 PreCmd同时出现，运行数据不会被读取。
+      - cmd: sys
         cmd_flag: "]"
+      - cmd: user-interface vty 0 4
+        cmd_flag: "]"
+      - cmd: screen-length 50
+        cmd_flag: "]"
+      - cmd: quit
+        cmd_flag: ""
+      - cmd: quit
+        cmd_flag: ""
+      - cmd: quit
+        cmd_flag: ""
+        read_cmd: dis mac-add #需要读取终端执行的命令
+        core_cmd: dis arp # 与 read_cmd 二选一，现阶段此为核心交换机需要执行的
+        read_flag: "]"
+        exit_cmds: #退出之前执行的命令
+          - cmd: screen-length 0
+            cmd_flag: "]"
 ```
 
 ## linux 编译环境
